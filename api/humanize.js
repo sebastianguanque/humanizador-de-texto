@@ -22,7 +22,7 @@ export default async function handler(request, response) {
 
   try {
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     // Crea el prompt detallado para la IA
     const prompt = `Actúa como un humanizador de texto profesional. Transforma el siguiente texto para que suene más humano, natural y empático, eliminando el tono robótico o genérico. El tono deseado es: ${tone}. Mantén el significado original.
@@ -34,18 +34,16 @@ export default async function handler(request, response) {
     `;
 
     const result = await model.generateContent(prompt);
-    const apiResponse = await result.response;
+    const apiResponse = result.response;
     const humanizedText = apiResponse.text();
 
     // Envía el texto humanizado al frontend
     response.status(200).json({ humanizedText });
   } catch (error) {
     console.error("Error en la función de humanización:", error);
-    response
-      .status(500)
-      .json({
-        error:
-          "Error al procesar el texto con la IA. Por favor, revisa la API key o los logs.",
-      });
+    response.status(500).json({
+      error:
+        "Error al procesar el texto con la IA. Por favor, revisa la API key o los logs.",
+    });
   }
 }
