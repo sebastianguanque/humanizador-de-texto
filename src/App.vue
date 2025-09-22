@@ -2,22 +2,19 @@
   <div class="app-container">
     <div class="main-wrapper">
       <!-- Título principal -->
-      <h1 class="main-title">
-        Humanizador de Texto
-      </h1>
-      
+      <h1 class="main-title">Humanizador de Texto</h1>
+
       <!-- Descripción -->
       <p class="description">
-        Transforma texto generado por IA en contenido más natural, empático y humano
+        Transforma texto generado por IA en contenido más natural, empático y
+        humano
       </p>
 
       <!-- Contenedor principal -->
       <div class="content-card">
         <!-- Selector de tono -->
         <div class="tone-selector-section">
-          <label class="section-label">
-            Tono del texto humanizado
-          </label>
+          <label class="section-label"> Tono del texto humanizado </label>
           <div class="tone-buttons-grid">
             <button
               v-for="tone in tones"
@@ -25,7 +22,9 @@
               @click="selectedTone = tone.value"
               :class="[
                 'tone-button',
-                selectedTone === tone.value ? 'tone-button-active' : 'tone-button-inactive'
+                selectedTone === tone.value
+                  ? 'tone-button-active'
+                  : 'tone-button-inactive',
               ]"
             >
               {{ tone.label }}
@@ -37,16 +36,14 @@
         <div class="text-areas-grid">
           <!-- Texto original -->
           <div class="text-area-section">
-            <label class="section-label">
-              Texto Original
-            </label>
+            <label class="section-label"> Texto Original </label>
             <textarea
               v-model="originalText"
               placeholder="Pega aquí el texto que quieres humanizar. Puede ser contenido generado por IA, texto técnico, o cualquier texto que suene muy formal o robótico..."
               :class="[
                 'textarea',
                 'textarea-original',
-                originalText.length > 0 ? 'textarea-filled' : ''
+                originalText.length > 0 ? 'textarea-filled' : '',
               ]"
             ></textarea>
             <div class="character-count">
@@ -56,16 +53,14 @@
 
           <!-- Texto humanizado -->
           <div class="text-area-section">
-            <label class="section-label">
-              Texto Humanizado
-            </label>
+            <label class="section-label"> Texto Humanizado </label>
             <textarea
               v-model="humanizedText"
               placeholder="Aquí aparecerá tu texto humanizado. Será más natural, empático y con un tono más conversacional..."
               :class="[
                 'textarea',
                 'textarea-humanized',
-                humanizedText.length > 0 ? 'textarea-filled-green' : ''
+                humanizedText.length > 0 ? 'textarea-filled-green' : '',
               ]"
               readonly
             ></textarea>
@@ -81,18 +76,41 @@
             @click="humanizeText"
             :disabled="!originalText.trim() || isProcessing"
             class="humanize-button"
-            :class="{ 'humanize-button-disabled': !originalText.trim() || isProcessing }"
+            :class="{
+              'humanize-button-disabled': !originalText.trim() || isProcessing,
+            }"
           >
             <span v-if="!isProcessing" class="button-content">
-              <svg class="button-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+              <svg
+                class="button-icon"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
+                ></path>
               </svg>
               Humanizar Texto
             </span>
             <span v-else class="button-content">
               <svg class="button-icon spinner" fill="none" viewBox="0 0 24 24">
-                <circle class="spinner-circle" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="spinner-path" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                <circle
+                  class="spinner-circle"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  class="spinner-path"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
               </svg>
               Humanizando...
             </span>
@@ -115,90 +133,55 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref } from "vue";
 
-const originalText = ref('')
-const humanizedText = ref('')
-const isProcessing = ref(false)
-const selectedTone = ref('conversacional')
+const originalText = ref("");
+const humanizedText = ref("");
+const isProcessing = ref(false);
+const selectedTone = ref("conversacional");
 
 const tones = [
-  { value: 'formal', label: 'Formal' },
-  { value: 'conversacional', label: 'Conversacional' },
-  { value: 'amigable', label: 'Amigable' },
-  { value: 'tecnico', label: 'Técnico' }
-]
+  { value: "formal", label: "Formal" },
+  { value: "conversacional", label: "Conversacional" },
+  { value: "amigable", label: "Amigable" },
+  { value: "tecnico", label: "Técnico" },
+];
 
 const humanizeText = async () => {
-  if (!originalText.value.trim()) return
-  
-  isProcessing.value = true
-  
-  try {
-    // Simulación de procesamiento (aquí iría la llamada a la API real)
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
-    const humanized = humanizeTextBasic(originalText.value, selectedTone.value)
-    humanizedText.value = humanized
-    
-  } catch (error) {
-    console.error('Error al humanizar texto:', error)
-    humanizedText.value = 'Error al procesar el texto. Por favor, inténtalo de nuevo.'
-  } finally {
-    isProcessing.value = false
-  }
-}
+  if (!originalText.value.trim()) return;
 
-const humanizeTextBasic = (text, tone) => {
-  let humanized = text
-  
-  // Reemplazos básicos según el tono
-  const toneReplacements = {
-    formal: [
-      { from: /\bhey\b/gi, to: 'estimado/a' },
-      { from: /\bokay\b/gi, to: 'de acuerdo' },
-      { from: /\bsuper\b/gi, to: 'muy' }
-    ],
-    conversacional: [
-      { from: /\ben consecuencia\b/gi, to: 'por eso' },
-      { from: /\bpor lo tanto\b/gi, to: 'así que' },
-      { from: /\bademás\b/gi, to: 'también' }
-    ],
-    amigable: [
-      { from: /\bno obstante\b/gi, to: 'sin embargo' },
-      { from: /\bcon el fin de\b/gi, to: 'para' },
-      { from: /\bes importante destacar\b/gi, to: 'vale la pena mencionar' }
-    ],
-    tecnico: [
-      { from: /\bimplementar\b/gi, to: 'desarrollar' },
-      { from: /\butilizar\b/gi, to: 'usar' },
-      { from: /\boptimizar\b/gi, to: 'mejorar' }
-    ]
+  isProcessing.value = true;
+
+  try {
+    // Llama a la función serverless de Vercel
+    const response = await fetch("/api/humanize", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        text: originalText.value,
+        tone: selectedTone.value,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("La llamada a la API falló");
+    }
+
+    const data = await response.json();
+    humanizedText.value = data.humanizedText;
+  } catch (error) {
+    console.error("Error al humanizar texto:", error);
+    humanizedText.value =
+      "Error al procesar el texto. Por favor, inténtalo de nuevo.";
+  } finally {
+    isProcessing.value = false;
   }
-  
-  // Aplicar reemplazos según el tono
-  if (toneReplacements[tone]) {
-    toneReplacements[tone].forEach(replacement => {
-      humanized = humanized.replace(replacement.from, replacement.to)
-    })
-  }
-  
-  // Reemplazos generales
-  const generalReplacements = [
-    { from: /\ba continuación\b/gi, to: 'ahora' },
-    { from: /\bse debe tener en cuenta\b/gi, to: 'hay que considerar' }
-  ]
-  
-  generalReplacements.forEach(replacement => {
-    humanized = humanized.replace(replacement.from, replacement.to)
-  })
-  
-  return humanized + `\n\n✨ Texto humanizado con tono ${tone}. Recuerda revisar y ajustar según tus necesidades específicas.`
-}
+};
 </script>
 
 <style scoped>
-/* Convertido todo de Tailwind CSS a CSS puro */
 .app-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%);
