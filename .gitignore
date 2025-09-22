@@ -1,0 +1,25 @@
+# dependencias de node
+/node_modules
+
+# archivos de build
+/dist
+/build
+/out
+
+# archivos de log y cache
+.DS_Store
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# archivos de entorno y configuraciones sensibles
+.env
+.env.local
+.env.production
+.env.development
+
+# archivos de IDEs (ej. VS Code)
+.vscode/
+
+# archivos generados por Vite
+.vite/
