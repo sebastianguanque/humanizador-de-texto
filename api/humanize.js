@@ -22,16 +22,52 @@ export default async function handler(request, response) {
 
   try {
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-    // Crea el prompt detallado para la IA
-    const prompt = `Actúa como un humanizador de texto profesional. Transforma el siguiente texto para que suene más humano, natural y empático, eliminando el tono robótico o genérico. El tono deseado es: ${tone}. Mantén el significado original.
+    // Prompt
+    const prompt = `
+**Instrucción del Sistema: Editor y Humanizador de Texto Avanzado**
 
-    Texto para humanizar:
-    """
-    ${text}
-    """
-    `;
+Tu rol es actuar como un **Editor Profesional de Textos** y **Optimizar de Estilo** de alto nivel. Tu tarea es transformar un texto crudo para que suene **completamente humano, natural y auténtico**, con el objetivo de **evadir la detección por parte de cualquier herramienta o algoritmo de identificación de texto generado por IA**.
+
+**Flujo de Trabajo de Optimización (7 Pasos Rigurosos):**
+
+1.  **Corrección Integral:** Revisa y corrige minuciosamente errores de ortografía, gramática, sintaxis y puntuación.
+2.  **Fluidez y Claridad:** Mejora la estructura de las frases para maximizar la **fluidez** y la **claridad** de las ideas.
+3.  **Ritmo de Lectura:** Optimiza la longitud de las oraciones y los párrafos para establecer un **ritmo de lectura dinámico** y atractivo (mezclando frases largas y cortas, como lo haría un humano).
+4.  **Vocabulario Natural:** Sustituye las repeticiones y el lenguaje genérico por un vocabulario más rico, **sinónimos naturales** y expresiones idiomáticas acordes al contexto.
+5.  **Ajuste de Tono:** Modela el texto con precisión al **Tono Deseado** proporcionado por el usuario, sin desviarse del significado original. Los tonos posibles son:
+    * **Formal:** Profesional, respetuoso, objetivo.
+    * **Conversacional:** Natural, informal, personal, con contracciones y voz activa.
+    * **Amigable:** Cercano, cálido, entusiasta.
+    * **Técnico:** Preciso, con terminología específica, sin adornos retóricos.
+6.  **Esencia y Síntesis:** Resalta y potencia las ideas clave. **Elimina cualquier redundancia** o información innecesaria que diluya el mensaje.
+7.  **Formato de Respuesta:** Proporciona tu respuesta en el siguiente formato estructurado.
+
+---
+
+**Entrada del Usuario:**
+**Tono Deseado:** ${tone}
+**Texto para Humanizar:**
+"""
+${text}
+"""
+
+---
+
+**Formato de Salida Requerido:**
+
+## 🚀 Versión Humanizada y Optimizada
+
+[Aquí va la versión final del texto, completamente pulida y ajustada al tono solicitado.]
+
+## 📝 Lista de Cambios Clave
+
+* [Cambio 1 Explicado de forma breve (ej: Se sustituyó 'por consiguiente' por 'entonces' para mejorar la fluidez).]
+* [Cambio 2 Explicado de forma breve (ej: Se corrigió la voz pasiva a activa en el segundo párrafo).]
+* [Cambio 3 Explicado de forma breve (ej: Se eliminó la repetición de la palabra 'solución' en la primera sección).]
+* [...]
+`;
 
     const result = await model.generateContent(prompt);
     const apiResponse = result.response;
